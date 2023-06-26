@@ -1,4 +1,3 @@
-
 function [zI, zQ, A, tau] = receiver(y)
     % Frequency band
     f_low = 35e3; 
@@ -37,10 +36,10 @@ function [zI, zQ, A, tau] = receiver(y)
     % --------------------- Find channel properties -----------------------
 
     % Create local chirp
-    tchirp = Ts*[0:5*fs-1]';
+    tchirp = Ts*[0:1*fs-1]';
     fchirp0 = f_low + 9.9e3;
     fchirp1 = f_high - 9.9e3;
-    local_chirp = 0.1*chirp(tchirp, fchirp0, 5, fchirp1);
+    local_chirp = 0.1*chirp(tchirp, fchirp0, 1, fchirp1);
     
     % Correlate to find properties
     [corr, lag] = xcorr(y, local_chirp);
@@ -53,9 +52,9 @@ function [zI, zQ, A, tau] = receiver(y)
     delay_seconds = delay_samples/fs;
     % Convert to microseconds with one decimal
     tau = round(delay_seconds, 7) * 1e6;
-    % Remove chirp, 5 seconds + delay_samples
-    received_chirp = y(delay_samples + 1:fs*5 + delay_samples);
-    y = y(fs*5 + delay_samples + 1: L);
+    % Remove chirp, 1 seconds + delay_samples
+    received_chirp = y(delay_samples + 1:fs*1 + delay_samples);
+    y = y(fs*1 + delay_samples + 1: L);
     L = length(y);
     t = Ts*[0:L-1];
     
@@ -69,7 +68,7 @@ function [zI, zQ, A, tau] = receiver(y)
     
     amplitude_sign = sign(corr(delay));
     A = round(received_chirp_norm / local_chirp_norm * amplitude_sign, 1);
-    y = y./A;
+    y = y/A;
     
     %figure;
     %plot(corr);

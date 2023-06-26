@@ -103,11 +103,11 @@ function x = sender(xI, xQ)
     %plot(f, X);
     
     % ----------------------------- Add chirp -----------------------------
-    % Adds a 5 seconds long chirp to the start of the signal
+    % Adds a 1 seconds long chirp to the start of the signal
     
     fchirp0 = f_low + 9.9e3;
     fchirp1 = f_high - 9.9e3;
-    c = 0.1*chirp(t, fchirp0, 5, fchirp1);
+    c = 0.1*chirp(t(1:L/5), fchirp0, 1, fchirp1);
     x = cat(1, c', x);
     
     X = abs(fft(x));
